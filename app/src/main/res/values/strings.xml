@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">GitHub Search</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="enter_search_keywords">Enter search keywords</string>
+
+    <string name="sort_by">Sort by:</string>
+    <string name="stars_count">Stars count</string>
+    <string name="forks_count">Forks count</string>
+    <string name="updated_count">Updated count</string>
+
+    <string name="order">Order:</string>
+    <string name="descending">Descending</string>
+    <string name="ascending">Ascending</string>
+
+    <string name="search_in">Search in:</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="readme">README</string>
+
+    <string name="Save">Save</string>
+
+    <string name="image_description">Image</string>
+    <string name="title_activity_rep_details">RepDetailsActivity</string>
+</resources>

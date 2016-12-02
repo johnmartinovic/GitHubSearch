@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <ImageView
+        android:id="@+id/author_image"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:scaleType="centerCrop"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:contentDescription="@string/image_description"/>
+
+    <TextView
+        android:id="@+id/repository_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/author_image"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@id/author_image"
+        android:layout_toEndOf="@id/author_image" />
+
+    <TextView
+        android:id="@+id/author_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/repository_name"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@id/author_image"
+        android:layout_toEndOf="@id/author_image" />
+
+    <ImageView
+        android:id="@+id/ic_eye"
+        app:srcCompat="@drawable/ic_eye"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleType="centerCrop"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:contentDescription="@string/image_description"
+        android:layout_toRightOf="@id/author_image"
+        android:layout_toEndOf="@id/author_image"
+        android:layout_below="@id/author_name" />
+
+    <TextView
+        android:id="@+id/watchers"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/ic_eye"
+        android:layout_alignBottom="@id/ic_eye"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@id/ic_eye"
+        android:layout_toEndOf="@id/ic_eye" />
+
+    <ImageView
+        android:id="@+id/ic_repo_forked"
+        app:srcCompat="@drawable/ic_repo_forked"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleType="centerCrop"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:contentDescription="@string/image_description"
+        android:layout_toRightOf="@id/author_image"
+        android:layout_toEndOf="@id/author_image"
+        android:layout_below="@id/ic_eye" />
+
+    <TextView
+        android:id="@+id/forks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/ic_repo_forked"
+        android:layout_alignBottom="@id/ic_repo_forked"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@id/ic_repo_forked"
+        android:layout_toEndOf="@id/ic_repo_forked" />
+
+    <ImageView
+        android:id="@+id/ic_issue_opened"
+        app:srcCompat="@drawable/ic_issue_opened"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:scaleType="centerCrop"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:contentDescription="@string/image_description"
+        android:layout_toRightOf="@id/author_image"
+        android:layout_toEndOf="@id/author_image"
+        android:layout_below="@id/ic_repo_forked" />
+
+    <TextView
+        android:id="@+id/issues"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/ic_issue_opened"
+        android:layout_alignBottom="@id/ic_issue_opened"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@id/ic_issue_opened"
+        android:layout_toEndOf="@id/ic_issue_opened" />
+</RelativeLayout>
