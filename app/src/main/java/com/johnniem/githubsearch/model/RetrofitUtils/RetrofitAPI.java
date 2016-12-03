@@ -1,5 +1,7 @@
 package com.johnniem.githubsearch.model.RetrofitUtils;
 
+import com.johnniem.githubsearch.model.POJOs.OwnerDetailed;
+import com.johnniem.githubsearch.model.POJOs.RepoDetailed;
 import com.johnniem.githubsearch.model.POJOs.SearchData;
 
 import retrofit2.Call;
@@ -16,8 +18,18 @@ public interface RetrofitAPI {
             @Query("order") String order
     );
 
-    @GET("search/repositories")
+    @GET
     Call<SearchData> searchRepositories(
+            @Url String url
+    );
+
+    @GET
+    Call<RepoDetailed> getRepoDetailed(
+            @Url String url
+    );
+
+    @GET
+    Call<OwnerDetailed> getOwnerDetailed(
             @Url String url
     );
 }

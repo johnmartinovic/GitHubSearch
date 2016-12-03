@@ -29,7 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class ListModel implements MVP.ProvidedModelOps {
 
-    private static final String gitHubURL = "https://api.github.com/";
+    public static final String gitHubURL = "https://api.github.com/";
 
     private RetrofitAPI mRetrofitAPI;
 

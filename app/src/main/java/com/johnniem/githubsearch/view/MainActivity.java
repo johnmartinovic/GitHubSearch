@@ -5,30 +5,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.johnniem.githubsearch.MVP;
 import com.johnniem.githubsearch.R;
-import com.johnniem.githubsearch.model.POJOs.Items;
+import com.johnniem.githubsearch.common.Utils;
+import com.johnniem.githubsearch.model.POJOs.SearchData.Items;
 import com.johnniem.githubsearch.model.adapter.ItemsAdapter;
 import com.johnniem.githubsearch.presenter.ListPresenter;
 import com.johnniem.githubsearch.common.GenericActivity;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -52,7 +52,12 @@ public class MainActivity
         ListPresenter>
         implements MVP.RequiredViewOps {
 
-    public static final String RepUrlExtra = "repUrlString";
+    public static final String REPO_URL = "repUrlString";
+
+    public enum InfoDialog {
+        SNACKBAR,
+        TOAST
+    }
 
     // Settings dialog views
     RadioGroup mRadioSortByGroup;
@@ -70,14 +75,12 @@ public class MainActivity
     Toolbar toolbar;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-
-    @BindView(R.id.progressBar_loading)
-    ProgressBar mLoadingProgressBar;
-
     @BindView(R.id.keywords)
     TextView keywordTextView;
     @BindView(R.id.repositoriesListView)
     ListView repositoriesListView;
+
+    View repositoriesListViewFooterView;
 
     ItemsAdapter mItemsAdapter;
 
@@ -98,6 +101,9 @@ public class MainActivity
         // MVP.RequiredViewOps instance.
         super.onCreate(ListPresenter.class,
                 this);
+
+        // init other view properties
+        initializeOtherFieldsProperties();
     }
 
     /**
@@ -121,10 +127,19 @@ public class MainActivity
     private void initializeViewFields() {
         ButterKnife.bind(this);
 
-        repositoriesListView.setOnScrollListener(new RepoOnScrollListener());
-
         setSupportActionBar(toolbar);
 
+        repositoriesListViewFooterView = LayoutInflater.from(this).inflate(R.layout.repository_list_view_loading_footer, repositoriesListView, false);
+        repositoriesListView.addFooterView(repositoriesListViewFooterView);
+
+        // prevent floationg action button from being covered by keyboard
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    }
+
+    /**
+     * Initialize the View fields.
+     */
+    private void initializeOtherFieldsProperties() {
         // set Floating Action Button to start data download on click
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +147,9 @@ public class MainActivity
                 getPresenter().startDataDownload(keywordTextView.getText().toString());
             }
         });
+
+        repositoriesListView.setOnScrollListener(new RepoOnScrollListener());
+        repositoriesListView.setOnItemClickListener(new RepoOnItemClickListener());
 
         // prevent floationg action button from being covered by keyboard
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -174,7 +192,7 @@ public class MainActivity
      */
     @Override
     public void displayProgressBar() {
-        mLoadingProgressBar.setVisibility(View.VISIBLE);
+        repositoriesListView.addFooterView(repositoriesListViewFooterView);
     }
 
     /**
@@ -182,7 +200,7 @@ public class MainActivity
      */
     @Override
     public void dismissProgressBar() {
-        mLoadingProgressBar.setVisibility(View.INVISIBLE);
+        repositoriesListView.removeFooterView(repositoriesListViewFooterView);
     }
 
     @Override
@@ -198,16 +216,22 @@ public class MainActivity
     }
 
     @Override
-    public void reportStatus(String status) {
-        Snackbar.make(findViewById(R.id.content_main), status, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+    public void reportStatus(InfoDialog infoDialog, String status) {
+        switch (infoDialog) {
+            case SNACKBAR:
+                Utils.showSnackbar(findViewById(R.id.content_main), status);
+                break;
+            case TOAST:
+                Utils.showToast(this, status);
+                break;
+        }
     }
 
     @Override
     public void displayRepoDetails(String url) {
         // Open an Activity for displaying the repository details.
-        Intent intent = new Intent(this, RepDetailsActivity.class);
-        intent.putExtra(RepUrlExtra, url);
+        Intent intent = new Intent(this, RepoDetailsActivity.class);
+        intent.putExtra(REPO_URL, url);
         startActivity(intent);
     }
 
@@ -326,19 +350,31 @@ public class MainActivity
         }
     }
 
+    // onScrollListener implementation to download data when end is reached
     class RepoOnScrollListener implements AbsListView.OnScrollListener {
-
         @Override
         public void onScrollStateChanged(AbsListView absListView, int i) {
-
+            // empty
         }
 
         @Override
-        public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-            if (repositoriesListView.getLastVisiblePosition() == repositoriesListView.getAdapter().getCount() - 1
-                    && repositoriesListView.getChildAt(repositoriesListView.getChildCount() - 1).getBottom() <= repositoriesListView.getHeight()) {
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            if(firstVisibleItem + visibleItemCount == totalItemCount &&
+                    totalItemCount > visibleItemCount &&
+                    totalItemCount!=0){
                 getPresenter().continueDataDownload();
             }
+        }
+    }
+
+    // onItemClickListener implementation to show details about selected repo
+    private class RepoOnItemClickListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Items selectedRepItem = (Items) parent.getItemAtPosition(position);
+
+            getPresenter().repoItemSelected(selectedRepItem);
         }
     }
 }

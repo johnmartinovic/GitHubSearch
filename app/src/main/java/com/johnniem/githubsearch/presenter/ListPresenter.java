@@ -1,7 +1,7 @@
 package com.johnniem.githubsearch.presenter;
 
 import android.content.Context;
-import android.view.inputmethod.InputMethodManager;
+import android.os.CountDownTimer;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import com.johnniem.githubsearch.MVP;
 import com.johnniem.githubsearch.common.GenericPresenter;
 import com.johnniem.githubsearch.model.ListModel;
-import com.johnniem.githubsearch.model.POJOs.Items;
 import com.johnniem.githubsearch.model.POJOs.SearchData;
+import com.johnniem.githubsearch.model.POJOs.SearchData.Items;
+import com.johnniem.githubsearch.view.MainActivity;
 
 
 /**
@@ -32,9 +33,6 @@ public class ListPresenter
      */
     private WeakReference<MVP.RequiredViewOps> mView;
 
-    public static final boolean DOWNLOAD_SUCCESS = true;
-    public static final boolean DOWNLOAD_FAIL = false;
-
     private String mSearchKeywords;
     private String mSearchQualifiers;
     private String mSortValue;
@@ -43,10 +41,14 @@ public class ListPresenter
 
     private ArrayList<Items> mItemsList;
 
-    boolean isDownloadInProgress;
+    private boolean isDownloadInProgress;
 
     // if "null", search is done
-    String mNextLink;
+    private String mNextLink;
+
+
+    // this is activated to prevent GitAPI server from forbidding us
+    private boolean isTimeout = false;
 
     /**
      * Hook method called when a new instance of ListPresenter is
@@ -128,6 +130,8 @@ public class ListPresenter
         mSearchString = mSearchKeywords + mSearchQualifiers;
 
         mView.get().refreshRepoList(mItemsList);
+
+        mView.get().dismissProgressBar();
     }
 
     /****************************************************************************************
@@ -136,14 +140,16 @@ public class ListPresenter
     @Override
     public void startDataDownload(String searchKeywords) {
         // skip this call if data is still being downloaded
-        if (isDownloadInProgress)
+        if (isDownloadInProgress || isTimeout)
             return;
 
         // return if string is empty
         if (searchKeywords.isEmpty()) {
-            mView.get().reportStatus("Pls write something brah...");
+            mView.get().reportStatus(MainActivity.InfoDialog.TOAST, "Pls write something brah...");
             return;
         }
+
+        isDownloadInProgress = true;
 
         mView.get().dismissSoftKeyboard();
 
@@ -151,7 +157,7 @@ public class ListPresenter
         mItemsList = new ArrayList<>();
         mView.get().resetItemsAdapter();
 
-        isDownloadInProgress = true;
+        // display progress bar to user
         mView.get().displayProgressBar();
         this.mSearchKeywords = searchKeywords;
 
@@ -162,12 +168,23 @@ public class ListPresenter
 
     @Override
     public void continueDataDownload() {
+        // skip this call if data is still being downloaded
+        if (isDownloadInProgress || isTimeout)
+            return;
+
         if (mNextLink == null) {
-            mView.get().reportStatus("You got all the data...");
+            // start countdown so the message doesn't appear all the time
+            (new SetTimeoutFor(5000)).start();
+            mView.get().reportStatus(MainActivity.InfoDialog.SNACKBAR, "You got all the data...");
+            return;
         }
 
-        getModel().downloadSearchData(getApplicationContext(), mNextLink);
+        isDownloadInProgress = true;
 
+        // display progress bar to user
+        mView.get().displayProgressBar();
+
+        getModel().downloadSearchData(getApplicationContext(), mNextLink);
     }
 
     @Override
@@ -185,6 +202,11 @@ public class ListPresenter
         mView.get().dismissSearchSettings();
     }
 
+    @Override
+    public void repoItemSelected(Items item) {
+        mView.get().displayRepoDetails(item.getUrl());
+    }
+
     /****************************************************************************************
      * Methods needed by the ListModel class to interact with ListPresenter class.
      */
@@ -193,14 +215,24 @@ public class ListPresenter
         mView.get().dismissProgressBar();
 
         if (searchData == null) {
-            mView.get().reportStatus("Ups... Something went wrong");
+            // set 10s timeout from downloading again
+            // Reason (from official GitHub):
+            // For unauthenticated requests, the rate limit allows you to make up to 10 requests per minute.
+            (new SetTimeoutFor(10000)).start();
+            mView.get().reportStatus(MainActivity.InfoDialog.TOAST, "Ups... Something went wrong. Pls wait a sec, maybe you were scrolling too fast!");
+
+            // reset downloading status
+            isDownloadInProgress = false;
+
             return;
         }
 
         // if results are good, update next link
         mNextLink = nextLink;
 
-        mView.get().reportStatus("Results: " + searchData.getTotal_count());
+        // print number of results found only if this is first search, i.e. item list is empty
+        if (mItemsList.isEmpty())
+            mView.get().reportStatus(MainActivity.InfoDialog.TOAST, "Results found: " + searchData.getTotal_count());
 
         // refresh list and adapter
         mItemsList.addAll(searchData.getItems());
@@ -208,5 +240,23 @@ public class ListPresenter
 
         // reset downloading status
         isDownloadInProgress = false;
+    }
+
+    private class SetTimeoutFor extends CountDownTimer {
+
+        SetTimeoutFor(long timeoutLength) {
+            super(timeoutLength, timeoutLength);
+            isTimeout = true;
+        }
+
+        @Override
+        public void onTick(long l) {
+            // nothing
+        }
+
+        @Override
+        public void onFinish() {
+            isTimeout = false;
+        }
     }
 }

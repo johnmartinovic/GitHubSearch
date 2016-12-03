@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">GitHub Search</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Search parameters</string>
+    <string name="main_activity_name">List of Repos</string>
+    <string name="repo_details_activity_name">Repo Details</string>
 
     <string name="enter_search_keywords">Enter search keywords</string>
 
@@ -22,4 +24,9 @@
 
     <string name="image_description">Image</string>
     <string name="title_activity_rep_details">RepDetailsActivity</string>
+    <string name="author_info_string">Author info:</string>
+    <string name="created_at_string">Created at:</string>pushed_at_string
+    <string name="updated_at_string">Updated at:</string>
+    <string name="pushed_at_string">Pushed at:</string>language_string
+    <string name="language_string">Language:</string>
 </resources>

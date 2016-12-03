@@ -1,6 +1,5 @@
 package com.johnniem.githubsearch.model.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.johnniem.githubsearch.R;
-import com.johnniem.githubsearch.model.POJOs.Items;
+import com.johnniem.githubsearch.model.POJOs.SearchData.Items;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ItemsAdapter extends ArrayAdapter<Items> implements View.OnClickListener {
     private Context mContext;
@@ -27,13 +29,23 @@ public class ItemsAdapter extends ArrayAdapter<Items> implements View.OnClickLis
     }
 
     // View lookup cache
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(R.id.author_image)
         ImageView authorImage;
+        @BindView(R.id.repository_name)
         TextView repositoryName;
+        @BindView(R.id.author_name)
         TextView authorName;
+        @BindView(R.id.watchers)
         TextView watchers;
+        @BindView(R.id.forks)
         TextView forks;
+        @BindView(R.id.issues)
         TextView issues;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     @Override
@@ -45,13 +57,8 @@ public class ItemsAdapter extends ArrayAdapter<Items> implements View.OnClickLis
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.repository_list_view_item, parent, false);
 
-            viewHolder = new ViewHolder();
-            viewHolder.authorImage      = (ImageView) convertView.findViewById(R.id.author_image);
-            viewHolder.repositoryName   = (TextView) convertView.findViewById(R.id.repository_name);
-            viewHolder.authorName       = (TextView) convertView.findViewById(R.id.author_name);
-            viewHolder.watchers         = (TextView) convertView.findViewById(R.id.watchers);
-            viewHolder.forks            = (TextView) convertView.findViewById(R.id.forks);
-            viewHolder.issues           = (TextView) convertView.findViewById(R.id.issues);
+            viewHolder = new ViewHolder(convertView);
+            ButterKnife.bind(this, convertView);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
@@ -60,7 +67,9 @@ public class ItemsAdapter extends ArrayAdapter<Items> implements View.OnClickLis
         Items items = getItem(position);
 
         String imgUrl = items.getOwner().getAvatar_url();
-        Picasso.with(mContext).load(imgUrl).into(viewHolder.authorImage);
+        Picasso.with(mContext)
+                .load(imgUrl)
+                .into(viewHolder.authorImage);
         viewHolder.repositoryName.setText(items.getName());
         viewHolder.authorName.setText(items.getOwner().getLogin());
         viewHolder.watchers.setText(String.valueOf(items.getWatchers_count()));
@@ -74,6 +83,6 @@ public class ItemsAdapter extends ArrayAdapter<Items> implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-
+        // do nothing
     }
 }

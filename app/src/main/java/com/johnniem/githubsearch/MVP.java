@@ -1,16 +1,13 @@
 package com.johnniem.githubsearch;
 
 import android.content.Context;
-import android.net.Uri;
-import android.widget.CheckBox;
-import android.widget.RadioGroup;
 
 import com.johnniem.githubsearch.common.ContextView;
 import com.johnniem.githubsearch.common.ModelOps;
 import com.johnniem.githubsearch.common.PresenterOps;
-import com.johnniem.githubsearch.model.POJOs.Items;
 import com.johnniem.githubsearch.model.POJOs.SearchData;
-import com.johnniem.githubsearch.presenter.ListPresenter;
+import com.johnniem.githubsearch.model.POJOs.SearchData.Items;
+import com.johnniem.githubsearch.view.MainActivity;
 
 import java.util.ArrayList;
 
@@ -28,7 +25,7 @@ public interface MVP {
      * ContextView interface so the Model layer can access Context's
      * defined in the View layer.
      */
-    public interface RequiredViewOps
+    interface RequiredViewOps
             extends ContextView {
         /**
          * Remove the keyboard
@@ -48,17 +45,17 @@ public interface MVP {
         /**
          * Display the repositories data provided so far
          */
-        public void refreshRepoList(ArrayList<Items> itemsList);
+        void refreshRepoList(ArrayList<Items> itemsList);
 
         /**
          * Reset Items Adapter
          */
-        public void resetItemsAdapter();
+        void resetItemsAdapter();
 
         /**
          * Handle failure to download the data.
          */
-        void reportStatus(String status);
+        void reportStatus(MainActivity.InfoDialog infoDialog, String status);
 
         /**
          * Start the DisplayDetailsActivity to display the results of
@@ -90,7 +87,7 @@ public interface MVP {
      * MVP.RequiredViewOps interface used to define the parameter
      * that's passed to the onConfigurationChange() method.
      */
-    public interface ProvidedPresenterOps
+    interface ProvidedPresenterOps
             extends PresenterOps<MVP.RequiredViewOps> {
         /**
          * Start the repository data download
@@ -111,6 +108,11 @@ public interface MVP {
          * Set search options
          */
         void setSearchOpts(String sortValue, String orderValue, String searchQualifiers);
+
+        /**
+         * Item in repo list was selected
+         */
+        void repoItemSelected(Items item);
     }
 
     /**
@@ -120,7 +122,7 @@ public interface MVP {
      * so the Model layer can access Context's defined in the View
      * layer.
      */
-    public interface RequiredPresenterOps
+    interface RequiredPresenterOps
             extends ContextView {
         /**
          * Interact with the Presenter layer to display the
@@ -137,7 +139,7 @@ public interface MVP {
      * interface used to define the argument passed to the
      * onConfigurationChange() method.
      */
-    public interface ProvidedModelOps
+    interface ProvidedModelOps
             extends ModelOps<MVP.RequiredPresenterOps> {
         /**
          * Download repositories data only with url value
