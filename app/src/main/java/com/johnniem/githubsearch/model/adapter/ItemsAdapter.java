@@ -36,6 +36,8 @@ public class ItemsAdapter extends ArrayAdapter<Items> implements View.OnClickLis
         TextView repositoryName;
         @BindView(R.id.author_name)
         TextView authorName;
+        @BindView(R.id.stars)
+        TextView stars;
         @BindView(R.id.watchers)
         TextView watchers;
         @BindView(R.id.forks)
@@ -72,6 +74,7 @@ public class ItemsAdapter extends ArrayAdapter<Items> implements View.OnClickLis
                 .into(viewHolder.authorImage);
         viewHolder.repositoryName.setText(items.getName());
         viewHolder.authorName.setText(items.getOwner().getLogin());
+        viewHolder.stars.setText(String.valueOf(items.getStargazers_count()));
         viewHolder.watchers.setText(String.valueOf(items.getWatchers_count()));
         viewHolder.forks.setText(String.valueOf(items.getForks_count()));
         viewHolder.issues.setText(String.valueOf(items.getOpen_issues_count()));

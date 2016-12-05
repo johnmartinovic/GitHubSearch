@@ -201,7 +201,7 @@ public class RepoDetailsActivity extends AppCompatActivity {
         language.setText(detailedInfo.getRepoDetailed().getLanguage());
 
         // adapt date format to specific area
-        DateFormat df = DateFormat.getDateInstance();
+        DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         repoCreatedAt.setText(df.format(detailedInfo.getRepoDetailed().getCreated_at()));
         repoUpdatedAt.setText(df.format(detailedInfo.getRepoDetailed().getUpdated_at()));
         repoPushedAt.setText(df.format(detailedInfo.getRepoDetailed().getPushed_at()));
@@ -213,8 +213,8 @@ public class RepoDetailsActivity extends AppCompatActivity {
         description.setText(detailedInfo.getRepoDetailed().getDescription());
         login.setText(detailedInfo.getOwnerDetailed().getLogin());
         authorName.setText(detailedInfo.getOwnerDetailed().getName());
-        authorCreatedAt.setText(detailedInfo.getOwnerDetailed().getCreated_at());
-        authorUpdatedAt.setText(detailedInfo.getOwnerDetailed().getUpdated_at());
+        authorCreatedAt.setText(df.format(detailedInfo.getOwnerDetailed().getCreated_at()));
+        authorUpdatedAt.setText(df.format(detailedInfo.getOwnerDetailed().getUpdated_at()));
 
         // make button clickable and all data visible
         fab.setOnClickListener(new btnOnClickListener(detailedInfo.getRepoDetailed().getHtml_url()));

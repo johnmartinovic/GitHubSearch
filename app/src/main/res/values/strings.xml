@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">GitHub Search</string>
     <string name="action_settings">Search parameters</string>
-    <string name="main_activity_name">List of Repos</string>
+    <string name="main_activity_name">GitHub Search</string>
     <string name="repo_details_activity_name">Repo Details</string>
 
     <string name="enter_search_keywords">Enter search keywords</string>

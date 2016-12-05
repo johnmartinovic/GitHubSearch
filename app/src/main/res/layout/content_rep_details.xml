@@ -49,23 +49,22 @@
                 android:text="@string/language_string" />
 
             <TextView
-                android:id="@+id/repo_created_at_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/created_at_string" />
-
-            <TextView
                 android:id="@+id/repo_updated_at_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/updated_at_string" />
-
 
             <TextView
                 android:id="@+id/repo_pushed_at_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pushed_at_string" />
+
+            <TextView
+                android:id="@+id/repo_created_at_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/created_at_string" />
         </LinearLayout>
 
         <LinearLayout
@@ -83,12 +82,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-
-            <TextView
-                android:id="@+id/repo_created_at"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
             <TextView
                 android:id="@+id/repo_updated_at"
                 android:layout_width="wrap_content"
@@ -96,6 +89,11 @@
 
             <TextView
                 android:id="@+id/repo_pushed_at"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/repo_created_at"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -108,7 +106,8 @@
             android:layout_below="@id/linear_layout_dates"
             android:layout_toRightOf="@id/author_image"
             android:layout_toEndOf="@id/author_image"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -119,22 +118,25 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingTop="2dp" >
 
                     <ImageView
                         android:id="@+id/ic_star"
                         app:srcCompat="@drawable/ic_star"
-                        android:layout_width="14dp"
-                        android:layout_height="16dp"
-                        android:scaleType="fitXY"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:scaleType="fitCenter"
                         android:contentDescription="@string/image_description"/>
 
                     <ImageView
                         android:id="@+id/ic_eye"
                         app:srcCompat="@drawable/ic_eye"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
-                        android:scaleType="fitXY"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:scaleType="fitCenter"
                         android:contentDescription="@string/image_description"/>
                 </LinearLayout>
 
@@ -145,15 +147,15 @@
 
                     <TextView
                         android:id="@+id/stars"
-                        android:layout_width="match_parent"
-                        android:gravity="center_vertical"
-                        android:layout_height="16dp"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/watchers"
-                        android:layout_width="match_parent"
-                        android:gravity="center_vertical"
-                        android:layout_height="16dp" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -163,27 +165,30 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"  >
+                android:orientation="horizontal" >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:paddingTop="2dp" >
 
                     <ImageView
                         android:id="@+id/ic_repo_forked"
                         app:srcCompat="@drawable/ic_repo_forked"
-                        android:layout_width="10dp"
-                        android:layout_height="16dp"
-                        android:scaleType="fitXY"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:scaleType="fitCenter"
                         android:contentDescription="@string/image_description"/>
 
                     <ImageView
                         android:id="@+id/ic_issue_opened"
                         app:srcCompat="@drawable/ic_issue_opened"
-                        android:layout_width="14dp"
-                        android:layout_height="16dp"
-                        android:scaleType="fitXY"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:scaleType="fitCenter"
                         android:contentDescription="@string/image_description"/>
 
                 </LinearLayout>
@@ -195,15 +200,15 @@
 
                     <TextView
                         android:id="@+id/forks"
-                        android:layout_width="match_parent"
-                        android:gravity="center_vertical"
-                        android:layout_height="16dp"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/issues"
-                        android:layout_width="match_parent"
-                        android:gravity="center_vertical"
-                        android:layout_height="16dp"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 

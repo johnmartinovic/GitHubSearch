@@ -87,6 +87,12 @@ public class ListPresenter
         // Reset the mView WeakReference.
         mView = new WeakReference<>(view);
 
+        // Display progress bar if download is in progress
+        if (isDownloadInProgress)
+            mView.get().displayProgressBar();
+        else
+            mView.get().dismissProgressBar();
+
         // Redisplay the repos data
         mView.get().initAdapter(mItemsList);
     }

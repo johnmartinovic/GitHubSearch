@@ -47,6 +47,7 @@ public class SearchData
     public static class Items {
         private String name;
         private Owner owner;
+        private int stargazers_count;
         private int watchers_count;
         private int forks_count;
         private int open_issues_count;
@@ -98,6 +99,14 @@ public class SearchData
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public int getStargazers_count() {
+            return stargazers_count;
+        }
+
+        public void setStargazers_count(int stargazers_count) {
+            this.stargazers_count = stargazers_count;
         }
 
         public static class Owner {

@@ -23,7 +23,9 @@
         <activity
             android:name=".view.RepoDetailsActivity"
             android:label="@string/repo_details_activity_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>
